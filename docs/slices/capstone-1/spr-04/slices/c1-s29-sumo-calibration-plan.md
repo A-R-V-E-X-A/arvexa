@@ -1,0 +1,91 @@
+# C1-S29 — SUMO Calibration Plan
+
+> **ARVEXA Slice Documentation**  
+> Capstone: Capstone 1  
+> Sprint: SPR-04 — SUMO Baseline & Experiment Plan  
+> Slice: C1-S29
+
+## Status
+
+- **Implementation status:** `Not Started`
+- **Evidence status:** `Pending`
+- **Last updated:** `YYYY-MM-DD`
+- **Owner:** `TBD`
+- **Reviewer:** `TBD`
+
+## Source Specification
+
+**Objective**
+Define the process to be used in Capstone-3 to calibrate the SUMO simulation against real traffic observations. This is a planning document; implementation is deferred.
+
+**Inputs**
+- `docs/architecture/sumo-architecture.md` (C1-S18)
+- `docs/experiments/traffic-demand-model.md` (C1-S23)
+
+**Outputs**
+- `docs/experiments/sumo-calibration-plan.md`
+- Calibration parameter list; calibration metric definition
+
+**Acceptance Criteria**
+- [ ] Calibration parameters are listed (demand flow rates, headway distributions, speed distributions)
+- [ ] Calibration metric is defined (e.g., GEH statistic ≤ 5 for ≥ 85% of flows, RMSE on flow)
+- [ ] Step-by-step calibration process is described
+- [ ] Calibration and validation datasets are distinguished (no data leakage)
+
+**Dependencies** — C1-S22, C1-S23
+
+---
+
+## Implementation Record
+
+### What was implemented
+- [ ] Implementation completed
+- [ ] Configuration added/updated
+- [ ] Tests added/updated
+- [ ] Documentation updated
+
+### Files / Components
+
+```text
+# Replace these placeholders with actual repository paths.
+src/...
+tests/...
+configs/...
+docs/...
+```
+
+### Verification Evidence
+
+- [ ] Unit-test evidence
+- [ ] Integration-test evidence
+- [ ] Runtime / simulation evidence
+- [ ] Screenshot/log evidence where applicable
+- [ ] Result artifact linked
+
+**Evidence links:**
+```text
+# Add GitHub-relative links here.
+```
+
+### Acceptance Criteria Verification
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| Calibration parameters are listed (demand flow rates, headway distributions, speed distributions) | `Pending` | — |
+| Calibration metric is defined (e.g., GEH statistic ≤ 5 for ≥ 85% of flows, RMSE on flow) | `Pending` | — |
+| Step-by-step calibration process is described | `Pending` | — |
+| Calibration and validation datasets are distinguished (no data leakage) | `Pending` | — |
+
+### Dependencies
+
+C1-S22, C1-S23
+
+### Notes / Decisions
+
+Record implementation decisions, deviations, assumptions, and supervisor feedback here.
+
+### Change Log
+
+| Date | Change | Author |
+|---|---|---|
+| YYYY-MM-DD | Initial documentation entry | TBD |

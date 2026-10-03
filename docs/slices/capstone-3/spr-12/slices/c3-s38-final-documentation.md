@@ -1,0 +1,92 @@
+# C3-S38 — Final Documentation
+
+> **ARVEXA Slice Documentation**  
+> Capstone: Capstone 3  
+> Sprint: SPR-12 — Final Evaluation & Capstone-3  
+> Slice: C3-S38
+
+## Status
+
+- **Implementation status:** `Not Started`
+- **Evidence status:** `Pending`
+- **Last updated:** `YYYY-MM-DD`
+- **Owner:** `TBD`
+- **Reviewer:** `TBD`
+
+## Source Specification
+
+**Objective**
+Complete all code documentation, API docstrings, architecture notes, and inline comments so the codebase is understandable by a reader who is unfamiliar with it.
+
+**Inputs**
+- All `src/` modules
+- `docs/` directory
+
+**Outputs**
+- Complete docstrings on all public functions, classes, and modules
+- `docs/architecture/` updated to reflect final implementation
+- `docs/vision/`, `docs/integration/`, `docs/analysis/` populated
+
+**Acceptance Criteria**
+- [ ] Every public function has a docstring with parameters, returns, and a usage example
+- [ ] Architecture documents accurately reflect the final implementation (no stale diagrams)
+- [ ] A new team member can understand the purpose of each `src/` module from its docstring alone
+- [ ] Documentation is verified by at least one team member not responsible for the module
+
+**Dependencies** — C3-S23 (final pipeline state), C3-S25 (final config state)
+
+---
+
+## Implementation Record
+
+### What was implemented
+- [ ] Implementation completed
+- [ ] Configuration added/updated
+- [ ] Tests added/updated
+- [ ] Documentation updated
+
+### Files / Components
+
+```text
+# Replace these placeholders with actual repository paths.
+src/...
+tests/...
+configs/...
+docs/...
+```
+
+### Verification Evidence
+
+- [ ] Unit-test evidence
+- [ ] Integration-test evidence
+- [ ] Runtime / simulation evidence
+- [ ] Screenshot/log evidence where applicable
+- [ ] Result artifact linked
+
+**Evidence links:**
+```text
+# Add GitHub-relative links here.
+```
+
+### Acceptance Criteria Verification
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| Every public function has a docstring with parameters, returns, and a usage example | `Pending` | — |
+| Architecture documents accurately reflect the final implementation (no stale diagrams) | `Pending` | — |
+| A new team member can understand the purpose of each `src/` module from its docstring alone | `Pending` | — |
+| Documentation is verified by at least one team member not responsible for the module | `Pending` | — |
+
+### Dependencies
+
+C3-S23 (final pipeline state), C3-S25 (final config state)
+
+### Notes / Decisions
+
+Record implementation decisions, deviations, assumptions, and supervisor feedback here.
+
+### Change Log
+
+| Date | Change | Author |
+|---|---|---|
+| YYYY-MM-DD | Initial documentation entry | TBD |

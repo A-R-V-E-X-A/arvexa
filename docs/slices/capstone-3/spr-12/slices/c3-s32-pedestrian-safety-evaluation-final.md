@@ -1,0 +1,92 @@
+# C3-S32 — Pedestrian-Safety Evaluation (Final)
+
+> **ARVEXA Slice Documentation**  
+> Capstone: Capstone 3  
+> Sprint: SPR-12 — Final Evaluation & Capstone-3  
+> Slice: C3-S32
+
+## Status
+
+- **Implementation status:** `Not Started`
+- **Evidence status:** `Pending`
+- **Last updated:** `YYYY-MM-DD`
+- **Owner:** `TBD`
+- **Reviewer:** `TBD`
+
+## Source Specification
+
+**Objective**
+Evaluate ARVEXA's pedestrian safety performance: pedestrian waiting times, pedestrian phase allocation frequency, and compliance with all PRs.
+
+**Inputs**
+- Final ARVEXA results (C3-S29)
+- Pedestrian requirements (C1-S11)
+- Evaluation metrics for pedestrian performance (C1-S31)
+
+**Outputs**
+- `docs/results/pedestrian-safety-evaluation.md`
+- Pedestrian metrics summary vs baseline
+
+**Acceptance Criteria**
+- [ ] Average and maximum pedestrian waiting time are reported per scenario
+- [ ] Pedestrian phase minimum crossing time compliance rate is reported
+- [ ] PR compliance is explicitly checked for all PRs from C1-S11
+- [ ] Results are compared to fixed-time baseline on all pedestrian metrics
+
+**Dependencies** — C3-S29, C1-S11, C1-S31
+
+---
+
+## Implementation Record
+
+### What was implemented
+- [ ] Implementation completed
+- [ ] Configuration added/updated
+- [ ] Tests added/updated
+- [ ] Documentation updated
+
+### Files / Components
+
+```text
+# Replace these placeholders with actual repository paths.
+src/...
+tests/...
+configs/...
+docs/...
+```
+
+### Verification Evidence
+
+- [ ] Unit-test evidence
+- [ ] Integration-test evidence
+- [ ] Runtime / simulation evidence
+- [ ] Screenshot/log evidence where applicable
+- [ ] Result artifact linked
+
+**Evidence links:**
+```text
+# Add GitHub-relative links here.
+```
+
+### Acceptance Criteria Verification
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| Average and maximum pedestrian waiting time are reported per scenario | `Pending` | — |
+| Pedestrian phase minimum crossing time compliance rate is reported | `Pending` | — |
+| PR compliance is explicitly checked for all PRs from C1-S11 | `Pending` | — |
+| Results are compared to fixed-time baseline on all pedestrian metrics | `Pending` | — |
+
+### Dependencies
+
+C3-S29, C1-S11, C1-S31
+
+### Notes / Decisions
+
+Record implementation decisions, deviations, assumptions, and supervisor feedback here.
+
+### Change Log
+
+| Date | Change | Author |
+|---|---|---|
+| YYYY-MM-DD | Initial documentation entry | TBD |
