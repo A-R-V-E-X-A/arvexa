@@ -1,163 +1,367 @@
-# ARVEXA Literature Review
+# Literature Review
 
 ## 1. Review Purpose
 
-The literature review establishes the technical and research foundation for ARVEXA.
+This literature review establishes the research context for **ARVEXA (Adaptive Resilient Vehicle–pedestrian eXchange Architecture)** and identifies research gaps that directly inform its requirements, architecture, experiments, and evaluation.
 
-The review was organized around:
+The review focuses on adaptive traffic signal control using reinforcement learning, with particular attention to:
 
-1. reinforcement learning for adaptive traffic signal control;
-2. multi-objective traffic-signal optimization;
-3. pedestrian-aware signal control;
-4. emergency-vehicle priority and signal preemption;
-5. sensor failure, missing data, and robust control;
-6. safe and interpretable reinforcement learning;
-7. vision-based vehicle detection and counting;
-8. SUMO, digital twins, and simulation-to-real validation.
+1. Reinforcement learning (RL) and deep/multi-agent RL for adaptive traffic signal control.
+2. Multi-objective traffic signal control involving efficiency, safety, emissions, fairness, or related objectives.
+3. Pedestrian and vulnerable-road-user-aware signal control.
+4. Emergency-vehicle priority and signal preemption.
+5. Sensor failure, missing data, noisy observations, and robustness.
+6. Adversarial robustness and cybersecurity of RL traffic controllers.
+7. Vision-based vehicle detection, classification, tracking, and counting.
+8. SUMO, simulation-based evaluation, digital twins, and real-world grounding.
 
-The survey source reports an audit of 18 search themes, approximately 141 papers surfaced, and 113 papers curated into its bibliography.
+The supplied survey reports approximately **141 unique papers surfaced**, of which **113 were curated into the bibliography/database**.
 
-## 2. Reinforcement Learning for Traffic Signal Control
+> **Source note:** The counts and coverage statements in this document are derived from the supplied literature-survey material. They are not presented as an independently re-run systematic review.
 
-RL traffic-signal control models an intersection as a sequential decision process. A controller observes traffic state, selects an action, receives feedback, and updates a policy.
+---
 
-Typical objectives include minimizing waiting time, queue length, travel time, and stops while increasing throughput.
+## 2. Review Scope and Search Summary
 
-The literature demonstrates the usefulness of RL and deep RL, but also highlights state representation, reward design, training stability, generalization, safety, sensing uncertainty, and simulation-to-real transfer as practical challenges.
+The supplied survey records the following search activity:
 
-The survey identifies Michailidis et al. (2025) as a broad recent review and Chu et al. (2019) as foundational multi-agent deep-RL work.
+- Searches executed: **18**
+  - 7 Consensus searches
+  - 1 failed Consensus search
+  - 10 alphaXiv searches
+- Successful searches: **17**
+- Failed searches: **1**
+  - Consensus search #8, where the monthly quota was exhausted
+- Total unique papers surfaced: approximately **141**
+  - 68 via Consensus
+  - 74 via alphaXiv
+  - 1 cross-listed
+- Papers curated into the bibliography: **113**
 
-**ARVEXA implication:** RL is the adaptive decision layer, but the research extends the problem beyond traffic efficiency.
+The survey also notes that the alphaXiv results were predominantly recent **2024–2026 preprints**, and therefore many did not have established citation counts.
 
-## 3. Multi-Objective Traffic Signal Control
+The survey identified **adversarial robustness/cybersecurity** as a relatively thin area: the corresponding search returned only four directly on-topic papers. The source material therefore recommends a later, more exhaustive peer-reviewed search for this theme.
 
-Multi-objective RL has been used to combine efficiency with safety, emissions, fairness, and other objectives.
+---
 
-Zhang et al. (2024) is highlighted in the survey as a particularly relevant example combining safety, efficiency, and decarbonization.
+## 3. Core RL and MARL for Traffic Signal Control
 
-The literature shows that objective weighting matters and that a single aggregate score can hide trade-offs.
+Reinforcement learning has become an established approach for adaptive traffic signal control because a controller can learn a policy that maps observed traffic conditions to control actions rather than relying exclusively on manually designed fixed-time schedules.
 
-**ARVEXA implication:** objective-specific metrics must be reported in addition to reward.
+The reviewed literature includes both single-agent and multi-agent approaches. Multi-agent reinforcement learning (MARL) is particularly relevant to larger networks because signal controllers can be represented as interacting agents.
 
-## 4. Pedestrian-Aware Traffic Signal Control
+### Representative findings from the supplied survey
 
-Pedestrian-aware research introduces pedestrian behavior, crossing demand, or pedestrian safety into traffic-signal optimization.
+**Chu et al. (2019), “Multi-Agent Deep Reinforcement Learning for Large-Scale Traffic Signal Control”** is identified as a foundational reference for scalable/decentralized MARL-based traffic signal control. The work uses an actor-critic approach and is relevant to ARVEXA as a possible conceptual baseline for adaptive control.
 
-Relevant studies identified in the survey include Han et al. (2022), Yazdani et al. (2023), Xu et al. (2023), Ren et al. (2025), and Nam et al. (2026).
+The survey identifies an important limitation for ARVEXA's problem setting: the foundational efficiency-oriented approaches do not simultaneously address the project's combined requirements for pedestrian safety, emergency-vehicle priority, and sensor-failure tolerance.
 
-**Observed limitation:** pedestrian control is often treated as a dedicated objective or scenario rather than combined with sensor degradation and emergency priority.
+**Miletić et al. (2022)** provides a review of reinforcement-learning applications in adaptive traffic signal control and is used by the survey to establish the broader development of RL-based ATSC.
 
-**ARVEXA implication:** pedestrian demand and safety constraints should be part of the central controller.
+**Michailidis et al. (2025)** reviews applications and innovations in RL-based traffic signal control. The survey notes the continuing emphasis on traffic efficiency while secondary objectives are increasingly being considered.
 
-## 5. Emergency-Vehicle Priority
+**Saadi et al. (2025)** surveys reinforcement and deep reinforcement learning for coordination in intelligent traffic-light control. The supplied survey highlights the limited use of real end-to-end traffic data in the reviewed literature, motivating ARVEXA's planned camera-based validation.
 
-Emergency traffic-signal research commonly uses rule-based preemption or learned priority/control policies.
+**Owais et al. (2026)** compares adaptive traffic signal control strategies using MARL. The supplied survey identifies this work as useful for designing a comparative baseline/evaluation methodology.
 
-The survey highlights EMVLight by Su et al. as a major reference for multi-agent emergency-vehicle routing and signal control and Cao et al. (2022) for conflicting-direction emergency vehicles.
+**Cai et al. (2024)** investigates enhanced deep RL for adaptive urban traffic signal control and includes robustness/noise-related evaluation. The survey identifies the remaining absence of a combined treatment of pedestrian requirements, emergency priority, and realistic sensor failure.
 
-The central trade-off is:
+**Shabestary et al. (2022)** studies adaptive traffic signal control using deep RL with high-dimensional sensory inputs. The survey notes that this work does not provide the same explicit evaluation of missing/faulty observations required by ARVEXA.
 
-Emergency response versus delay imposed on other traffic.
+### Implication for ARVEXA
 
-**ARVEXA implication:** emergency priority should be measured independently and its effect on other traffic should also be reported.
+The literature supports RL as a suitable foundation for adaptive signal control, but the supplied survey indicates a need to evaluate a broader integrated controller rather than treating traffic efficiency as the only objective.
 
-## 6. Sensor Failure and Missing Data
+---
 
-The reviewed literature includes missing-data-aware RL, fault-tolerant control, observation reconstruction, robust MARL, distributionally robust control, and noisy traffic sensing.
+## 4. Multi-Objective Traffic Signal Control
 
-The survey identifies Reinforcement Learning Approaches for Traffic Signal Control under Missing Data as a direct lineage and discusses recent robust-control work.
+A major theme in the reviewed literature is the movement from single-objective efficiency optimization toward multi-objective traffic signal control.
 
-It also highlights İlyas et al. (2025) as a relevant example involving real data, a SUMO digital twin, sensor-failure fallback, and forecasting/RL components.
+Common objectives include:
 
-**ARVEXA implication:** evaluate whether degraded observations preserve the overall traffic-control objectives, not only whether missing data can be reconstructed.
+- delay reduction,
+- queue reduction,
+- throughput,
+- emissions or fuel consumption,
+- safety,
+- fairness,
+- and service quality.
 
-## 7. Safe and Interpretable RL
+The supplied survey identifies **17 curated papers** in the multi-objective RL category.
 
-The survey identifies Gu et al. (2024) on safe RL, Li et al. (2019) on formal methods and interpretable RL, Farzanegan et al. (2025) on safety-aware deep RL, and Glanois et al. (2021) on interpretable RL.
+### Relevance to ARVEXA
 
-**ARVEXA implication:** signal safety should be enforced by explicit constraints around the learned policy. The project does not need to solve the entire theoretical safe-RL problem.
+ARVEXA extends this direction by explicitly considering:
 
-## 8. Vision-Based Vehicle Detection and Counting
+- vehicle traffic efficiency,
+- pedestrian service and safety,
+- emergency-vehicle priority,
+- signal stability,
+- and robustness to degraded sensing.
 
-Computer vision provides a practical mechanism for obtaining traffic observations from existing camera infrastructure.
+The research question is therefore not simply whether RL can improve traffic flow, but how multiple competing objectives can be represented, constrained, and evaluated within one controller.
 
-The survey covers vehicle detection, classification, tracking, and counting and highlights Song et al. (2019) as an important reference.
+The supplied literature does not establish that all of these dimensions have been jointly evaluated under the same experimental protocol. This is therefore treated as a research gap rather than as an assumption of novelty.
 
-Known limitations include occlusion, low light, dense traffic, viewpoint, and classification errors.
+---
 
-**ARVEXA implication:** the vision pipeline provides traffic statistics for calibration and validation, but its outputs should not automatically be treated as perfect ground truth.
+## 5. Pedestrian Safety and Vulnerable Road Users
 
-## 9. SUMO and Simulation Validation
+The supplied survey identifies **14 curated papers** under pedestrian safety and vulnerable-road-user-aware signal control.
 
-SUMO is widely used for reproducible traffic-signal experiments, but its value depends on model calibration.
+Pedestrian-aware signal control introduces requirements that are different from vehicle-only optimization. A controller must account for pedestrian demand, crossing service, clearance time, and potential conflicts between vehicle-flow objectives and pedestrian requirements.
 
-The survey identifies simulation-to-real and digital-twin work including Sim2Signal (2026), Traffic Co-Simulation Framework Empowered by Infrastructure Camera Sensing and Reinforcement Learning (2024), and Digital Twins for Intelligent Intersections: A Literature Review (2025).
+For ARVEXA, this motivates explicit state variables and evaluation metrics for pedestrian activity rather than treating pedestrians as an external constraint.
 
-**ARVEXA implication:** calibrate the SUMO environment against observations from the selected real-world junction.
+The ARVEXA architecture therefore separates:
 
-## 10. Heterogeneous Traffic
+- pedestrian demand observation,
+- pedestrian service/clearance requirements,
+- safety constraints,
+- and pedestrian-related evaluation metrics.
 
-ARVEXA focuses on mixed traffic containing vehicle categories such as two-wheelers, cars, auto-rickshaws, buses, trucks, and emergency vehicles.
+The literature review supports this as an important extension of vehicle-centric adaptive signal control.
 
-Different classes can affect lane occupancy, queue discharge, and intersection demand.
+---
 
-The survey identifies heterogeneous mixed traffic as underrepresented relative to standardized simulation environments.
+## 6. Emergency-Vehicle Priority
 
-**ARVEXA implication:** vehicle type should be represented in the state where data quality permits, and its contribution should be tested through ablation.
+The supplied survey identifies **9 curated papers** dealing with emergency-vehicle priority and signal preemption.
 
-## 11. Literature Synthesis
+Emergency-vehicle requests introduce a priority-arbitration problem. A controller may need to give an ambulance, fire vehicle, or police vehicle priority while continuing to serve ordinary traffic and pedestrian requirements.
 
-| Research area | Maturity in reviewed literature | ARVEXA relevance |
+For ARVEXA, emergency priority is therefore modeled as an explicit controller objective/input rather than as a separate system operating independently of the adaptive signal controller.
+
+A key research question is how conflicting priority requests should be handled and how the effect of priority decisions on ordinary traffic should be measured.
+
+The supplied survey specifically identifies **conflicting priority request arbitration** as an important gap.
+
+---
+
+## 7. Sensor Failure, Missing Data, and Robustness
+
+The supplied survey identifies **18 curated papers** under sensor failure, fault tolerance, and robustness to missing/noisy data.
+
+This is particularly important for ARVEXA because a controller trained only on clean observations may behave unpredictably when traffic sensors produce:
+
+- missing values,
+- noisy counts,
+- incorrect vehicle classifications,
+- partially unavailable observations,
+- or degraded sensor coverage.
+
+The reviewed literature includes work on noise injection and robustness, but the survey identifies a distinction between generic noise robustness and systematic evaluation of realistic sensor failure modes.
+
+### ARVEXA approach
+
+ARVEXA models a separation between:
+
+```text
+True traffic state
+       ↓
+Observation / sensor model
+       ↓
+Ideal / noisy / missing / misclassified observation
+       ↓
+State representation
+       ↓
+RL controller
+```
+
+This allows the controller to be evaluated under controlled degradation rather than relying only on clean simulation observations.
+
+---
+
+## 8. Adversarial Robustness and Cybersecurity
+
+The supplied survey records only **4 directly on-topic papers** in the adversarial robustness/cybersecurity category.
+
+This is explicitly identified as a thin area in the supplied review. The survey recommends re-running this search after the search quota becomes available to obtain a more exhaustive peer-reviewed view.
+
+For ARVEXA, this theme should therefore be treated carefully. The project can evaluate resilience to sensing failures and degraded observations without claiming to provide a complete cybersecurity solution.
+
+Any stronger cybersecurity contribution would require additional literature coverage and a dedicated threat model.
+
+---
+
+## 9. Vision-Based Detection, Classification, Tracking, and Counting
+
+ARVEXA plans to use real camera footage for validation through a vision pipeline.
+
+The intended pipeline is:
+
+```text
+Camera footage
+      ↓
+Frame extraction / preprocessing
+      ↓
+Vehicle detection
+      ↓
+Vehicle classification
+      ↓
+Tracking
+      ↓
+Region / line definition
+      ↓
+Counting
+      ↓
+Time aggregation
+      ↓
+Traffic statistics
+      ↓
+SUMO calibration / validation
+```
+
+The supplied literature survey treats vision-based vehicle detection and counting as an important component for connecting simulated traffic control with real traffic observations.
+
+The key methodological requirement is to distinguish between:
+
+- **calibration data**, used to construct or tune the SUMO traffic model, and
+- **validation data**, used to test whether the calibrated simulation reasonably represents observed traffic.
+
+This separation reduces the risk of using the same observations both to tune and to validate the model.
+
+The review also highlights uncertainty in detection/classification/counting as an important consideration when transferring real observations into simulation.
+
+---
+
+## 10. SUMO, Simulation, Digital Twins, and Real-World Grounding
+
+SUMO provides the controlled experimental environment for ARVEXA.
+
+The supplied survey includes literature on:
+
+- SUMO-based RL traffic control,
+- traffic co-simulation,
+- digital twins,
+- traffic-control simulation,
+- and connections between simulation and real-world observations.
+
+The reviewed literature supports simulation as a practical environment for repeatable RL experimentation, but simulation results do not automatically establish real-world validity.
+
+ARVEXA therefore treats real-world grounding as a separate research requirement:
+
+```text
+Real junction observations
+        ↓
+Vision-based traffic statistics
+        ↓
+SUMO network / demand calibration
+        ↓
+Controlled RL experiments
+        ↓
+Baseline comparison
+        ↓
+Validation against held-out real observations
+```
+
+The supplied review identifies this real-world grounding as a meaningful area where existing RL traffic-signal studies can be strengthened.
+
+---
+
+## 11. Emerging LLM and Agentic Traffic-Signal Research
+
+The supplied literature database contains an **Emerging Paradigm: LLM & Agentic Control for Traffic Signals** category with **8 curated papers**.
+
+These papers are relevant as an emerging research direction, but they should not automatically be treated as replacements for established RL approaches.
+
+For ARVEXA, the current architecture remains centered on reinforcement learning and explicit safety/control mechanisms. LLM/agentic approaches may be monitored as related future work rather than introduced into the core controller without evidence that they satisfy the project's safety, reproducibility, and control requirements.
+
+---
+
+## 12. Consolidated Research Gaps
+
+The supplied literature review identifies the following gaps as particularly relevant to ARVEXA:
+
+| Gap | Description | ARVEXA relevance |
 |---|---|---|
-| RL traffic signal control | High | Core control method |
-| Multi-objective RL | High and active | Core optimization framework |
-| Pedestrian-aware control | Active | Safety/service objective |
-| Emergency priority | Active | Priority objective |
-| Sensor-failure robustness | Emerging/active | Resilience objective |
-| Safe RL | Mature in broader control | Safety layer |
-| Vision-based counting | Mature but imperfect | Real-data observation |
-| SUMO simulation | Widely used | Experimental environment |
-| Sim-to-real validation | Less common | Validation contribution |
-| Full integrated framework | Limited evidence | Main research gap |
+| G1 | Integrated multi-objective adaptive control | Combines traffic efficiency, pedestrian service/safety, emergency priority, and robustness |
+| G2 | Safety constraints alongside learned optimization | Places a safety/action layer between RL decisions and signal commands |
+| G3 | Joint pedestrian + emergency + sensor-resilience treatment | Evaluates these requirements within one controller |
+| G4 | Priority arbitration under conflicting demands | Studies emergency requests without ignoring normal traffic and pedestrian service |
+| G5 | Robustness to degraded observations | Evaluates missing, noisy, misclassified, and partial observations |
+| G6 | Heterogeneous mixed-traffic context | Includes vehicle classes relevant to mixed urban traffic |
+| G7 | Real-world grounding of SUMO evaluation | Uses real camera observations for calibration/validation |
+| G8 | Vision failure and uncertainty | Treats detection/counting uncertainty as part of the real-to-simulation pipeline |
+| G9 | Evidence for multi-objective trade-offs | Reports objective-specific metrics rather than relying on one aggregate score |
 
-## 12. Initial Core References
+These gaps should be understood as **research directions identified from the supplied review**, not as universal claims that no other study has addressed any of them.
 
-1. Chu et al. (2019), Multi-Agent Deep Reinforcement Learning for Large-Scale Traffic Signal Control.
-2. Michailidis et al. (2025), Traffic Signal Control via Reinforcement Learning: A Review on Applications and Innovations.
-3. Zhang et al. (2024), Multi-objective deep reinforcement learning approach for adaptive traffic signal control system with concurrent optimization of safety, efficiency, and decarbonization.
-4. Su et al. (2021/2022), EMVLight: a Multi-agent Reinforcement Learning Framework for an Emergency Vehicle Decentralized Routing and Traffic Signal Control System.
-5. Cao et al. (2022), A Gain With No Pain: Exploring Intelligent Traffic Signal Control for Emergency Vehicles.
-6. Han et al. (2022), Deep Reinforcement Learning for Intersection Signal Control Considering Pedestrian Behavior.
-7. Yazdani et al. (2023), Intelligent vehicle pedestrian light: A deep reinforcement learning approach for traffic signal control.
-8. Ren et al. (2025), Two-step deep reinforcement learning for traffic signal control to improve pedestrian safety using connected vehicle data.
-9. Gu et al. (2024), A Review of Safe Reinforcement Learning: Methods, Theories, and Applications.
-10. Glanois et al. (2021), A survey on interpretable reinforcement learning.
-11. Li et al. (2019), A formal methods approach to interpretable reinforcement learning for robotic planning.
-12. Song et al. (2019), Vision-based vehicle detection and counting system using deep learning in highway scenes.
-13. Reinforcement Learning Approaches for Traffic Signal Control under Missing Data (2023).
-14. İlyas et al. (2025), traffic-management/digital-twin work involving sensor-failure fallback and RL.
-15. Traffic Co-Simulation Framework Empowered by Infrastructure Camera Sensing and Reinforcement Learning (2024).
-16. Sim2Signal: Sim-to-Real Benchmarks for Traffic Signal Control (2026).
-17. Digital Twins for Intelligent Intersections: A Literature Review (2025).
-18. SIGMA: Symmetry-aware, Intelligent, Geometric, Multi-objective Adaptive Control for Robust, Dependable Traffic Management (2026).
+---
 
-## 13. Review Limitations
+## 13. Representative References
 
-The survey is a strong planning foundation but is not a guarantee of exhaustive literature coverage.
+The following references are representative of the supplied survey and literature database. The complete structured bibliography is maintained in:
 
-The audit records that one planned adversarial-robustness search was affected by a search quota and that subsequent searches used another source. Some recent sources are preprints.
+`docs/sources/literature/literature-database.xlsx`
 
-Therefore:
+Representative entries include:
 
-- update the literature before publication;
-- distinguish peer-reviewed papers from preprints;
-- do not use citation counts as a quality score;
-- recheck novelty against current literature.
+1. Chu et al. (2019), *Multi-Agent Deep Reinforcement Learning for Large-Scale Traffic Signal Control*, IEEE Transactions on Intelligent Transportation Systems.
+2. Miletić et al. (2022), *A review of reinforcement learning applications in adaptive traffic signal control*, IET Intelligent Transport Systems.
+3. Shabestary et al. (2022), *Adaptive Traffic Signal Control With Deep Reinforcement Learning and High Dimensional Sensory Inputs*, IEEE Transactions on Intelligent Transportation Systems.
+4. Cai et al. (2024), *Adaptive urban traffic signal control based on enhanced deep reinforcement learning*, Scientific Reports.
+5. Michailidis et al. (2025), *Traffic Signal Control via Reinforcement Learning: A Review on Applications and Innovations*, Infrastructures.
+6. Saadi et al. (2025), *A survey of reinforcement and deep reinforcement learning for coordination in intelligent traffic light control*, Journal of Big Data.
+7. Owais et al. (2026), *Adaptive Traffic Signal Control Using Multi-Agent Reinforcement Learning: A Comparison of Control Strategies*, Sustainability.
 
-## 14. Literature-to-ARVEXA Decision
+The complete database contains the additional papers, metadata, relevance notes, and project-specific implementable gaps captured during the supplied survey.
 
-The literature supports the following direction:
+---
 
-Literature → established RL methods → multi-objective control → explicit safety constraints → heterogeneous traffic → emergency priority → degraded sensing → real-data-grounded SUMO evaluation.
+## 14. Limitations of the Current Review
 
-The contribution will ultimately be determined by the exact implementation and experimental evidence.
+The supplied survey identifies several limitations:
+
+1. The search was not fully exhaustive.
+2. One Consensus search failed because its monthly quota was exhausted.
+3. The adversarial-robustness/cybersecurity area was thin and requires another search pass.
+4. Many recent alphaXiv sources are preprints and may not yet have established citation records.
+5. The literature should be updated before final publication of the ARVEXA research work.
+6. Novelty claims should be rechecked against the latest peer-reviewed literature.
+
+Accordingly, this document should be treated as the **current research-planning literature review**, not as the final publication-grade systematic literature review.
+
+---
+
+## 15. Relationship to ARVEXA Research Planning
+
+The literature review directly informs the ARVEXA research-planning chain:
+
+```text
+Literature
+    ↓
+Research Gap
+    ↓
+Research Questions
+    ↓
+Research Objectives
+    ↓
+System Requirements
+    ↓
+Architecture
+    ↓
+Implementation Slices
+    ↓
+Experiments
+    ↓
+Metrics
+    ↓
+Results
+```
+
+The literature database provides the evidence base for the research-gap and requirement documents, while the experiment plan should use the identified gaps to define controlled comparisons, ablations, failure scenarios, and real-world validation.
+
+---
+
+## 16. Provenance
+
+Primary source for this document:
+
+- Supplied ARVEXA literature-survey document: `Adaptive_Traffic_Signal_RL_Literature_Review.docx`
+- Supplied structured bibliography: `Traffic_signal_RL_literature_list (1).xlsx`
+
+The structured bibliography is preserved without replacing its source data in:
+
+`docs/sources/literature/literature-database.xlsx`
