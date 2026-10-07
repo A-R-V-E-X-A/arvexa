@@ -859,3 +859,17 @@ Before handing off to Capstone-2, verify all items below:
 | C1-EX-11 | Fixed-time baseline controller produces reproducible results | ☐ |
 | C1-EX-12 | Experiment scenarios and metrics frozen | ☐ |
 | C1-EX-13 | Reproducibility configuration in place | ☐ |
+
+## Research Direction Alignment — Reliability-Aware Study
+
+These sprint/slice activities must remain aligned with the current ARVEXA research anchor:
+
+> Does more traffic information always improve adaptive traffic-signal control when the reliability of that information varies?
+
+The research should treat state richness and observation reliability as explicit experimental variables. R1–R4 representations, controlled degradation modes, matched comparisons, safety/priority constraints, and reproducible evaluation should follow the authoritative documents:
+
+- `docs/research/research-direction.md`
+- `docs/architecture/rl-state-representation.md`
+- `docs/experiments/research-evaluation-protocol.md`
+
+Do not present pedestrian handling, emergency priority, sensor failure, computer vision, heterogeneous traffic, or RL individually as the novelty. Their role is to create and evaluate the information–reliability decision-making problem.

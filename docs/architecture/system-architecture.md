@@ -1,153 +1,43 @@
-# ARVEXA System Architecture
+# System Architecture
 
-## 1. Architecture Goal
+## High-level pipeline
 
-The ARVEXA architecture separates traffic perception, state construction, reinforcement learning, safety enforcement, simulation, and evaluation.
+`SUMO true state` → `observation/degradation model` → `state builder + reliability vector` → `RL controller` → `deterministic safety/priority boundary` → `TraCI` → `SUMO` → `metrics`
 
-The architecture is designed so that individual components can be changed and evaluated without rewriting the complete system.
+## Layer 1 — Simulation truth
 
-## 2. High-Level Architecture
+SUMO provides the reference traffic state. This state is not automatically assumed to be the controller's observation.
 
-Real-world junction
-→ camera footage
-→ vision pipeline
-→ traffic statistics
-→ SUMO calibration
-→ SUMO junction environment
-→ state builder
-→ multi-objective RL controller
-→ safety/action constraint layer
-→ signal command
-→ SUMO simulation
-→ evaluation and metrics.
+## Layer 2 — Observation model
 
-The real-world validation path is intentionally separate from direct RL control.
+The observation model converts the reference state into what a controller would actually observe. It can introduce missing data, noise, semantic misclassification, and partial sensor failure.
 
-## 3. Major Components
+## Layer 3 — State builder
 
-### 3.1 Perception Layer
+The state builder converts observations into R1–R4 representations and, for R4, produces explicit quality/reliability information.
 
-Converts camera footage into structured traffic observations such as vehicle count, class, movement/lane, timestamp, confidence, and tracking identifier where applicable.
+Conceptually: `ρ = [ρ_count, ρ_type, ρ_ped, ρ_emergency, ...]`
 
-The perception layer does not directly control signals.
+## Layer 4 — RL controller
 
-### 3.2 Calibration/Data Layer
+The policy receives the selected state and chooses signal phase and allowed duration/action extension within configured signal constraints.
 
-Transforms real observations into traffic-demand and composition information suitable for SUMO configuration.
+## Layer 5 — Safety/priority boundary
 
-Responsibilities include cleaning, aggregation, temporal analysis, vehicle-composition estimation, and quality checks.
+A deterministic layer validates or constrains actions according to pedestrian and emergency requirements. This boundary is authoritative for hard safety rules.
 
-### 3.3 SUMO Environment
+## Layer 6 — TraCI
 
-Provides road geometry, traffic demand, vehicle behavior, pedestrians, signal phases, emergency vehicles, simulation time, and traffic-state feedback.
+TraCI transfers controller decisions between the Python control system and SUMO during closed-loop simulation.
 
-### 3.4 State Builder
+## Layer 7 — Evaluation
 
-Converts raw simulation or perception information into the RL state.
+The evaluator compares controllers under matched conditions and records efficiency, safety, emergency response, stability, Information Benefit, and Degradation Ratio.
 
-Potential state groups:
+## Research separation
 
-| Group | Example information |
-|---|---|
-| Traffic | counts, queues, waiting, occupancy/density, vehicle composition |
-| Pedestrian | demand, waiting, active crossing, clearance |
-| Emergency | presence, approach, priority state |
-| Sensor | availability, confidence, missingness, observation age |
+The architecture deliberately separates:
 
-### 3.5 RL Controller
+**what is true → what is observed → how reliable it is → what the controller decides → what safety allows**
 
-Consumes the state and selects a candidate signal action. Detailed design is defined in rl-controller.md.
-
-### 3.6 Safety/Action Layer
-
-Validates candidate actions against legal phase transitions, minimum/maximum green, yellow and clearance intervals, pedestrian clearance, and emergency safety requirements.
-
-Only valid actions reach SUMO.
-
-### 3.7 Evaluation Layer
-
-Calculates traffic efficiency, pedestrian service, emergency response, robustness, signal stability, and computational metrics.
-
-## 4. Data Flow
-
-Observation
-→ normalization and quality check
-→ state construction
-→ policy inference
-→ candidate action
-→ safety validation
-→ signal command
-→ traffic response
-→ metric collection
-→ learning or evaluation.
-
-## 5. Training and Evaluation Modes
-
-### Training
-
-SUMO → state → RL policy → safety layer → action → reward → policy update.
-
-### Evaluation
-
-SUMO → state → frozen policy → safety layer → action → metrics.
-
-No policy update should occur during the principal evaluation runs.
-
-## 6. Baseline Architecture
-
-The same scenario should be evaluated using fixed-time, rule-based/actuated, reduced-RL where appropriate, and ARVEXA controllers.
-
-All controllers should use equivalent traffic demand and evaluation metrics.
-
-## 7. Research Data Flow
-
-Camera → vision → traffic statistics → SUMO calibration → controlled RL experiments.
-
-This keeps the core experiments reproducible while grounding the simulation in real traffic.
-
-## 8. Failure Handling
-
-The architecture should handle missing observations, invalid perception values, simulation communication failures, invalid policy actions, and incomplete scenario configuration.
-
-A failure must not silently become a valid-looking measurement.
-
-## 9. Configuration Boundaries
-
-The following should be configurable:
-
-- junction/network;
-- traffic demand;
-- vehicle composition;
-- signal constraints;
-- pedestrian demand;
-- emergency scenarios;
-- sensor-degradation level;
-- RL hyperparameters;
-- reward configuration;
-- experiment seeds.
-
-Source code should not contain hidden experiment assumptions.
-
-## 10. Architecture Principles
-
-1. Safety before optimization.
-2. Research traceability.
-3. Separation of concerns.
-4. Reproducibility.
-5. Measured claims.
-6. Replaceable algorithms.
-7. Real-data grounding.
-
-## 11. Architecture Traceability
-
-| Component | Research objective |
-|---|---|
-| State Builder | RO-01, RO-05 |
-| RL Controller | RO-02 |
-| Safety Layer | RO-03 |
-| Emergency Logic | RO-04 |
-| Degradation Model | RO-05 |
-| SUMO Environment | RO-06 |
-| Experiment Runner | RO-07 |
-| Vision Pipeline | RO-08 |
-| Evaluation Layer | RO-09, RO-10 |
+This separation is essential for studying information reliability rather than accidentally evaluating only the RL algorithm.
