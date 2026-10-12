@@ -1,8 +1,9 @@
 """Seeded perception-error primitives for ARVEXA's falsification experiments.
 
-These functions perturb observation records, never simulator ground truth.
-They are a testable starting point, not a validated detector/error model.
-Expected record keys: vehicle_id, vehicle_class, movement, confidence (optional).
+These functions perturb offline candidate detections; only their returned
+records may be exposed to a controller. This is a testable starting point,
+not a validated detector/error model. For persistence, records must be in
+timestamp order and include each candidate track/frame before error injection.
 """
 from __future__ import annotations
 
@@ -13,7 +14,7 @@ from typing import Any, Iterable
 def independent_missed_detections(
     records: Iterable[dict[str, Any]], miss_rate: float, seed: int
 ) -> list[dict[str, Any]]:
-    """Drop each record independently at the requested marginal probability."""
+    """Drop each candidate detection independently at the requested probability."""
     _validate_rate(miss_rate)
     rng = random.Random(seed)
     return [dict(r) for r in records if rng.random() >= miss_rate]
@@ -27,18 +28,20 @@ def persistent_missed_detections(
 ) -> list[dict[str, Any]]:
     """Apply a two-state Markov error process per vehicle ID.
 
-    persistence is P(error_t | error_{t-1}) for an already erroneous track.
-    For a new track or after a non-error state, the transition into error is
-    chosen so the stationary error probability is approximately miss_rate:
-        p_enter = miss_rate * (1 - persistence) / (1 - miss_rate)
-    This is only feasible when p_enter <= 1. The function preserves record
-    ordering; callers must pass observations in timestamp order.
+    persistence = P(error_t | error_(t-1)). The stationary error probability
+    is approximately miss_rate when the process is observed in stationarity:
+    p_enter = miss_rate * (1 - persistence) / (1 - miss_rate).
+    The input must contain candidate records for each track/frame, including
+    candidates that the simulated detector could miss. Never expose this
+    candidate list or simulator IDs to the evaluated policy.
     """
     _validate_rate(miss_rate)
     if not 0 <= persistence < 1:
         raise ValueError("persistence must be in [0, 1)")
     if miss_rate == 0:
         return [dict(r) for r in records]
+    if miss_rate == 1:
+        return []
     p_enter = miss_rate * (1 - persistence) / (1 - miss_rate)
     if p_enter > 1:
         raise ValueError("miss_rate and persistence imply an invalid transition probability")
@@ -63,9 +66,9 @@ def class_confusion(
 ) -> list[dict[str, Any]]:
     """Change class labels using a row-stochastic confusion matrix.
 
-    Each row maps true/current label to {observed_label: probability}. The
-    record count is preserved. Supply a matrix measured from validation data
-    when possible; synthetic matrices are stress tests, not empirical claims.
+    Each row maps the input class to observed-label probabilities. Record count
+    is preserved. Prefer a matrix measured on held-out camera footage; synthetic
+    matrices are stress tests, not empirical claims.
     """
     rng = random.Random(seed)
     output = []
