@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "status": "design_only_not_executed_in_sumo",
+  "seed_policy": {
+    "demand_seed": 42,
+    "observation_seed_base": 1000,
+    "controller_seed_base": 2000,
+    "smoke_seeds": [0, 1, 2],
+    "preliminary_paired_seeds": 10,
+    "final_seed_count": "determine from pilot variance and predeclared minimum practical effect"
+  },
+  "network": {
+    "type": "single_four_arm_signalized_junction",
+    "status": "must be generated and validated locally",
+    "vehicle_classes": ["motorcycle", "auto_rickshaw", "car", "bus"],
+    "pedestrians": true,
+    "emergency_vehicle": true
+  },
+  "demand_regimes": ["low", "near_capacity", "oversaturated"],
+  "error_rates": [0.0, 0.1, 0.25, 0.5],
+  "error_conditions": [
+    "clean_oracle_diagnostic_only",
+    "independent_missed_detections",
+    "persistent_missed_detections_matched_marginal_rate",
+    "class_confusion_count_preserving_where_possible",
+    "persistent_class_confusion_matched_marginal_rate",
+    "stale_observation",
+    "lane_movement_assignment_error",
+    "combined_errors_after_single_error_tests"
+  ],
+  "controllers": [
+    "fixed_time",
+    "actuated_if_faithfully_implemented",
+    "conventional_rl",
+    "fixed_fusion",
+    "calibrated_reliability_weighted_fusion",
+    "confidence_threshold_fallback",
+    "proposed_method",
+    "ucat_sc_faithful_reproduction_if_feasible",
+    "ciot_presslight_faithful_reproduction_if_feasible"
+  ],
+  "primary_metric": "mean_vehicle_delay_seconds",
+  "safety_gates": [
+    "no_conflicting_green",
+    "yellow_all_red_clearance_respected",
+    "minimum_green_respected",
+    "pedestrian_clearance_respected",
+    "report_emergency_priority_delay",
+    "report_deadline_misses_and_fallbacks"
+  ],
+  "reporting": {
+    "paired_scenarios_and_seeds": true,
+    "confidence_interval_level": 0.95,
+    "report_all_runs": true,
+    "do_not_use_oracle_as_deployable_baseline": true,
+    "do_not_claim_results_until_sumo_runs_exist": true
+  }
+}
